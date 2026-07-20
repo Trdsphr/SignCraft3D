@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useSearchParams } from "next/navigation";
@@ -7,50 +6,58 @@ import { useEffect, useState } from "react";
 
 export default function OrderPage() {
 
-
     const searchParams = useSearchParams();
 
-    const [order,setOrder] = useState<any>(null);
+    const [order, setOrder] = useState<any>(null);
 
 
 
-    useEffect(()=>{
+    useEffect(() => {
+
+        const data = searchParams.get("data");
 
 
-        const data =
-        searchParams.get("data");
+        if (data) {
+
+            try {
+
+                const decoded =
+                    JSON.parse(
+                        atob(data)
+                    );
 
 
-        if(data){
+                setOrder(decoded);
 
 
-            const decoded =
-            JSON.parse(
-                atob(data)
-            );
+            } catch(error) {
 
+                console.log(error);
 
-            setOrder(decoded);
+            }
 
         }
 
 
-    },[searchParams]);
+    }, [searchParams]);
 
 
 
 
 
-    if(!order){
+    if (!order) {
 
         return (
+
             <div>
+
                 Loading order...
+
             </div>
+
         )
 
     }
-
 
 
 
@@ -67,7 +74,7 @@ export default function OrderPage() {
 
 
             <p>
-                Name: {order.customerName}
+                Customer: {order.customerName}
             </p>
 
 
@@ -87,6 +94,7 @@ export default function OrderPage() {
 
 
 
+
             <h2>
                 Products
             </h2>
@@ -100,29 +108,34 @@ export default function OrderPage() {
                     <div key={index}>
 
                         <p>
-                        {item.modelName}
+                            {item.modelName}
                         </p>
 
                         <p>
-                        {item.houseNumber}
-                        {" "}
-                        {item.streetName}
+                            {item.houseNumber}
+                            {" "}
+                            {item.streetName}
                         </p>
 
                         <p>
-                        {item.colour}
+                            Colour:
+                            {" "}
+                            {item.colour}
                         </p>
 
                     </div>
 
-                ))
-
+                )
+                )
             }
 
 
 
+
+
             <h2>
-                Total: £{order.total}
+                Total:
+                £{order.total}
             </h2>
 
 
@@ -132,7 +145,6 @@ export default function OrderPage() {
                 Pay Now
 
             </button>
-
 
 
         </main>
